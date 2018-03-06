@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pokemon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="pokedex.css" />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script type="text/javascript"></script>
+    <script> $('#pokemon').ready(function () {
+            for (var i = 1; i < 152; i++) {
+                var url = `https://pokeapi.co/media/sprites/pokemon/${i}.png`
+                $('#pokemon').append(`<img src=${url} id = ${i} >`)
+            }
+            $(document).on('click', 'img', function () {
+                var id = $(this).attr('id')
+                var proxyurl = 'https://cors-anywhere.herokuapp.com/';
+                var url = `https://pokeapi.co/api/v2/pokemon/${id}`
+                $.get(proxyurl + url, function (res) {
+                    console.log(res);
+                    var html_str = "";
+                    html_str += `<img src='https://pokeapi.co/media/sprites/pokemon/${id}.png'>`;
+                    html_str += res.name;
+                    html_str += "<h4>Types</h4>";
+                    html_str += "<ul>";
+                    for (var i = 0; i < res.types.length; i++) {
+                        html_str += "<li>" + res.types[i].type.name + "</li>";
+                    }
+                    html_str += "<h4>Height</h4>"
+                    html_str += res.height; 
+                    html_str += "<h4>Weight</h4>"
+                    html_str += res.weight;
+                    html_str += "</ul>";
+                    $("#target").html(html_str);
+                    
+                }, "json");
+
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <h1 id="title">Original Pokemon</h1>
+        <div id="pokemon"></div>
+        <div id="info">
+            <h1 id='pokedex'>Pokedex</h1>
+            <div id='target'></div>
+        </div>
+</body>
+
+</html>
